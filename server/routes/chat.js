@@ -1,6 +1,6 @@
 import { Router } from "express";
 import dotnet from 'dotenv'
-import { Configuration, OpenAIApi } from 'openai'
+import axios from "axios";
 import user from '../helpers/user.js'
 import jwt from 'jsonwebtoken'
 import chat from "../helpers/chat.js";
@@ -45,115 +45,126 @@ const CheckUser = async (req, res, next) => {
     })
 }
 
-const configuration = new Configuration({
-    organization: process.env.OPENAI_ORGANIZATION,
-    apiKey: process.env.OPENAI_API_KEY
-})
 
-const openai = new OpenAIApi(configuration)
 
 router.get('/', (req, res) => {
     res.send("Welcome to chatGPT api v1")
 })
 
 router.post('/', CheckUser, async (req, res) => {
-    const { prompt, userId } = req.body
-
-    let response = {}
-
+    const { prompt, userId } = req.body;
+  
+    let response = {};
     try {
-        response.openai = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: prompt,
-            temperature: 0,
-            max_tokens: 100,
-            top_p: 1,
-            frequency_penalty: 0.2,
-            presence_penalty: 0,
+      // Call Claude API
+      const apiResponse = await axios.post(
+        process.env.CLAUDE_API_URL,
+        {
+          model: 'claude-3-sonnet-20240229', // Specify the desired model
+          max_tokens: 200,
+          temperature: 0.7,
+          messages: [{ role: 'user', content: prompt }],
+        },
+        {
+          headers: {
+            'x-api-key': process.env.CLAUDE_API_KEY,
+            'anthropic-version': '2023-06-01',
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      
+      console.log(apiResponse.data.content[0].text)
+      // Extract Claude's response text
+      const claudeText = apiResponse?.data?.content[0]?.text?.trim();
+  
+      if (claudeText) {
+        // Remove leading newlines
+        response.openai = claudeText.replace(/^\n+/, '');
+  
+        // Save the response to your database
+        response.db = await chat.newResponse(prompt, response.openai, userId);
+  
+        // Send success response
+        res.status(200).json({
+          status: 200,
+          message: 'Success',
+          data: {
+            _id: response.db?.chatId,
+            content: response.openai,
+          },
         });
-
-        if (response?.openai?.data?.choices?.[0]?.text) {
-            response.openai = response.openai.data.choices[0].text
-            let index = 0
-            for (let c of response['openai']) {
-                if (index <= 1) {
-                    if (c == '\n') {
-                        response.openai = response.openai.slice(1, response.openai.length)
-                    }
-                } else {
-                    break;
-                }
-                index++
-            }
-            response.db = await chat.newResponse(prompt, response, userId)
-        }
-    } catch (err) {
-        res.status(500).json({
-            status: 500,
-            message: err
-        })
-    } finally {
-        if (response?.db && response?.openai) {
-            res.status(200).json({
-                status: 200,
-                message: 'Success',
-                data: {
-                    _id: response.db['chatId'],
-                    content: response.openai
-                }
-            })
-        }
+      } else {
+        throw new Error('Claude API returned an empty response.');
+      }
+    } catch (error) {
+      // Log the error for debugging
+      console.error('Error calling Claude API:', error);
+  
+      // Send error response
+      res.status(500).json({
+        status: 500,
+        message: error.message || 'An unexpected error occurred.',
+      });
     }
-})
+  });
 
 router.put('/', CheckUser, async (req, res) => {
-    const { prompt, userId, chatId } = req.body
-
-    let response = {}
-
+    const { prompt, userId, chatId } = req.body;
+  
+    let response = {};
+  
     try {
-        response.openai = await openai.createCompletion({
-            model: "text-davinci-003",
-            prompt: prompt,
-            temperature: 0.7,
-            max_tokens: 100,
-            top_p: 1,
-            frequency_penalty: 0.2,
-            presence_penalty: 0,
-        });
 
-        if (response?.openai?.data?.choices?.[0]?.text) {
-            response.openai = response.openai.data.choices[0].text
-            let index = 0
-            for (let c of response['openai']) {
-                if (index <= 1) {
-                    if (c == '\n') {
-                        response.openai = response.openai.slice(1, response.openai.length)
-                    }
-                } else {
-                    break;
-                }
-                index++
-            }
-            response.db = await chat.updateChat(chatId, prompt, response, userId)
+      const apiResponse = await axios.post(
+        process.env.CLAUDE_API_URL,
+        {
+          model: 'claude-3-sonnet-20240229', // Specify the desired Claude model
+          max_tokens: 200,
+          temperature: 0.7,
+          messages: [{ role: 'user', content: prompt }],
+        },
+        {
+          headers: {
+            'x-api-key': process.env.CLAUDE_API_KEY,
+            'Content-Type': 'application/json',
+            'anthropic-version': '2023-06-01',
+          },
         }
+      );
+  
+
+      const claudeText = apiResponse?.data?.content[0]?.text?.trim();
+  
+      if (claudeText) {
+
+        response.openai = claudeText.replace(/^\n+/, '');
+  
+
+        response.db = await chat.updateChat(chatId, prompt, response.openai, userId);
+  
+
+        res.status(200).json({
+          status: 200,
+          message: 'Success',
+          data: {
+            content: response.openai,
+          },
+        });
+      } else {
+        throw new Error('Claude API returned an empty response.');
+      }
     } catch (err) {
-        res.status(500).json({
-            status: 500,
-            message: err
-        })
-    } finally {
-        if (response?.db && response?.openai) {
-            res.status(200).json({
-                status: 200,
-                message: 'Success',
-                data: {
-                    content: response.openai
-                }
-            })
-        }
+
+      console.error('Error calling Claude API:', err);
+  
+
+      res.status(500).json({
+        status: 500,
+        message: err.message || 'An unexpected error occurred.',
+      });
     }
-})
+  });
 
 router.get('/saved', CheckUser, async (req, res) => {
     const { userId } = req.body

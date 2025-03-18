@@ -4,7 +4,8 @@ import dotnet from 'dotenv'
 dotnet.config()
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.ethereal.email',
+    port: 587,
     auth: {
         user: process.env.MAIL_EMAIL,
         pass: process.env.MAIL_SECRET

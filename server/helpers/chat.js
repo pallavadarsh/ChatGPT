@@ -3,7 +3,7 @@ import collections from "../db/collections.js";
 import { ObjectId } from "mongodb";
 
 export default {
-    newResponse: (prompt, { openai }, userId) => {
+    newResponse: (prompt, openai , userId) => {
         return new Promise(async (resolve, reject) => {
             let chatId = new ObjectId().toHexString()
             let res = null
@@ -49,7 +49,7 @@ export default {
             }
         })
     },
-    updateChat: (chatId, prompt, { openai }, userId) => {
+    updateChat: (chatId, prompt, openai , userId) => {
         return new Promise(async (resolve, reject) => {
             let res = await db.collection(collections.CHAT).updateOne({
                 user: userId.toString(),

@@ -12,6 +12,7 @@ dotnet.config()
 let app = express()
 let port = process.env.PORT
 
+
 // for production copy paste react js product build files in dist folder
 app.use(express.static('dist'))
 
