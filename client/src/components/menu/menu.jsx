@@ -200,16 +200,12 @@ const Menu = ({ changeColorMode }) => {
               </>
             )
           }
-          <button><Avatar />Upgrade to Plus <span>New</span></button>
           <button onClick={() => {
             if (settingRef?.current) {
               settingRef.current.classList.add("clicked")
               settingRef.current.style.display = 'flex'
             }
           }} ><Settings />Settings</button>
-          <button onClick={() => {
-            window.open('https://help.openai.com/en/collections/3742473-chatgpt', '_blank')
-          }}><Tab />Get help</button>
           <button onClick={logOut} >
             <LogOut />Log out
           </button>
