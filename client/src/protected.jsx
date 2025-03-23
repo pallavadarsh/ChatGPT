@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { useLayoutEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -19,7 +20,8 @@ const ProtectedRoute = ({ offline, authed }) => {
       let res = null;
 
       try {
-        res = await instance.get("/api/user/checkLogged");
+        console.log(baseURL)
+        res = await instance.get(`${baseURL}/api/user/checkLogged`);
         if (res?.data?.data) {
           dispatch(insertUser(res?.data?.data));
         }

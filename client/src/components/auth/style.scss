@@ -535,6 +535,37 @@
             justify-content: center;
             flex-basis: 100%;
 
+            /* New field layout: 2 per row */
+            .register-field-row {
+                display: flex;
+                gap: 10px;
+                margin-bottom: 20px;
+            
+            
+            /* Shared field styling */
+            .register-field,
+            .company-type-input,
+            .persona-type-select,
+            .address-line1-input,
+            .address-line2-input,
+            .zipcode-input,
+            .state-select,
+            .phone-input {
+                flex: 1;
+                padding: 10px;
+                font-size: 1rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+
+                &:focus {
+                    outline-style: auto;
+                    outline-color: rgba(26, 127, 100, 1);
+                    outline-width: 2px;
+                }
+            }
+        }
+
             .fullName {
                 margin-top: 2rem;
                 display: flex;
@@ -599,4 +630,20 @@
             }
         }
     }
+}
+
+/* Full-width on smaller screens */
+@media (max-width: 600px) {
+  .register-field-row {
+    flex-direction: column;
+  }
+}
+
+/* Error message styling */
+.field-error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: -16px;
+  margin-bottom: 12px;
+  display: block;
 }

@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { Fragment, useCallback, useReducer, useState } from 'react'
 import { GptIcon, Tick, Google, Microsoft, Mail, } from '../../assets'
 import { Link, useNavigate } from 'react-router-dom'
@@ -46,7 +47,7 @@ const SignupComponent = () => {
     if (formData?.pass.length >= 8) {
       let res = null
       try {
-        res = await instance.post('/api/user/signup', formData)
+        res = await instance.post(`${baseURL}/api/user/signup`, formData)
       } catch (err) {
         console.log(err)
         if (err?.response?.data.message?.exists) {

@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 export { default as Chat } from './content/chat'
 export { default as New } from './content/new'
 export { default as Menu } from './menu/menu'

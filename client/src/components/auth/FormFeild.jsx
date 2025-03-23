@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { Fragment, useCallback, useRef, useState } from 'react'
 import { Eye, EyeHide } from '../../assets'
 

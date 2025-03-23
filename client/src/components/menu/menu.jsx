@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { Fragment, useEffect, useRef, useState } from 'react'
 import {
   Avatar, Bar, LogOut, Message, Plus, Settings, Tab, Tick, Trash, Xicon
@@ -26,7 +27,7 @@ const Menu = ({ changeColorMode }) => {
     if (window.confirm("Do you want log out")) {
       let res = null
       try {
-        res = await instance.get('/api/user/logout')
+        res = await instance.get(`${baseURL}/api/user/logout`)
       } catch (err) {
         alert(err)
       } finally {
@@ -44,7 +45,7 @@ const Menu = ({ changeColorMode }) => {
       let res = null
 
       try {
-        res = instance.delete('/api/chat/all')
+        res = instance.delete(`${baseURL}/api/chat/all`)
       } catch (err) {
         alert("Error")
         console.log(err)
@@ -95,7 +96,7 @@ const Menu = ({ changeColorMode }) => {
     const getHistory = async () => {
       let res = null
       try {
-        res = await instance.get('/api/chat/history')
+        res = await instance.get(`${baseURL}/api/chat/history`)
       } catch (err) {
         console.log(err)
       } finally {
@@ -233,7 +234,7 @@ const Modal = ({ changeColorMode, settingRef }) => {
 
       let res = null
       try {
-        res = await instance.delete('/api/user/account')
+        res = await instance.delete(`${baseURL}/api/user/account`)
       } catch (err) {
         console.log(err)
         if (err?.response?.data?.status === 405) {

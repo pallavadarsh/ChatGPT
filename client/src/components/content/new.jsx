@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { memo } from 'react'
 import { useDispatch } from 'react-redux'
 import { Sun, Thunder, Warning } from '../../assets'

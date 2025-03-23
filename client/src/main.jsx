@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import React from 'react'
 import ReactDOM from 'react-dom/client'

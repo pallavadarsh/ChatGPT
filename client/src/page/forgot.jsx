@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -34,7 +35,7 @@ const Forgot = () => {
           let res = null;
 
           try {
-            res = await instance.get("/api/user/forgot-check", {
+            res = await instance.get(`${baseURL}/api/user/forgot-check`, {
               params: {
                 userId,
                 secret,

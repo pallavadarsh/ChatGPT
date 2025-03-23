@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { useReducer, useState } from 'react'
 import { GptIcon, Google, Microsoft } from '../../assets'
 import { Link, useNavigate } from 'react-router-dom'
@@ -54,7 +55,8 @@ const LoginComponent = () => {
         e?.preventDefault()
         let res = null
         try {
-            res = await instance.get('/api/user/login', {
+            console.log(baseURL)
+            res = await instance.get(`${baseURL}/api/user/login`, {
                 params: googleData || formData
             })
         } catch (err) {

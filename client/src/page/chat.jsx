@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useReducer, useRef } from "react";
 import { Reload, Rocket, Stop } from "../assets";
 import { Chat, New } from "../components";
@@ -65,7 +66,7 @@ const Main = () => {
           const getSaved = async () => {
             let res = null;
             try {
-              res = await instance.get("/api/chat/saved", {
+              res = await instance.get(`${baseURL}/api/chat/saved`, {
                 params: {
                   chatId: id,
                 },
@@ -140,12 +141,12 @@ const InputArea = ({ status, chatRef, stateAction }) => {
 
       try {
         if (_id) {
-          res = await instance.put("/api/chat", {
+          res = await instance.put(`${baseURL}/api/chat`, {
             chatId: _id,
             prompt,
           });
         } else {
-          res = await instance.post("/api/chat", {
+          res = await instance.post(`${baseURL}/api/chat`, {
             prompt,
           });
         }

@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { setLoading } from '../redux/loading'

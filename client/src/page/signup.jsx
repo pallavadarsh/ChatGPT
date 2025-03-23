@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -33,7 +34,7 @@ const Signup = () => {
         const checkPending = async () => {
           let res = null;
           try {
-            res = await instance.get("/api/user/checkPending", {
+            res = await instance.get(`${baseURL}/api/user/checkPending`, {
               params: {
                 _id: id,
               },

@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import { configureStore } from "@reduxjs/toolkit";
 import user from "./user";
 import loading from "./loading";

@@ -1,3 +1,4 @@
+const baseURL = import.meta.env.VITE_API_URL;
 import { useEffect, useLayoutEffect, useState } from "react";
 import { Menu } from "./components";
 import { Routes, Route } from "react-router-dom";

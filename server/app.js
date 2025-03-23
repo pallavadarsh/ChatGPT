@@ -12,10 +12,6 @@ dotnet.config()
 let app = express()
 let port = process.env.PORT
 
-
-// for production copy paste react js product build files in dist folder
-app.use(express.static('dist'))
-
 app.use(cors({ credentials: true, origin: process.env.SITE_URL }))
 app.use(cookieParser())
 app.use(express.json({ limit: '50mb' }))
@@ -25,9 +21,14 @@ app.use('/api/chat/', ChatRoute)
 app.use('/api/user/', UserRoute)
 
 // front end react route
-app.get('/*',(req,res)=>{
+/*app.get('/*',(req,res)=>{
     res.sendFile(path.join(`${path.resolve(path.dirname(''))}/dist/index.html`))
-})
+})*/
+
+
+app.use('/api/*', (req, res) => {
+    res.status(404).json({ error: 'API route not found' });
+});
 
 connectDB((err) => {
     if (err) return console.log("MongoDB Connect Failed : ", err)

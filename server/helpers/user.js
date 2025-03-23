@@ -119,51 +119,53 @@ export default {
             }
         })
     },
-    finishSignup: ({ fName, lName, _id }) => {
+    finishSignup: ({ fName, lName, _id, companyType, personaType, address1, address2, zipcode, state, phone }) => {
         return new Promise(async (resolve, reject) => {
             let data = await db.collection(collections.TEMP).findOne({
                 _id: new ObjectId(_id)
-            }).catch((err) => {
-                reject(err)
-            })
-
+            }).catch((err) => reject(err));
+    
             if (data) {
-                let { pass, email } = data
-                email = email.replace('_register', '')
-
-                let res = null
+                let { pass, email } = data;
+                email = email.replace('_register', '');
+    
+                let res = null;
                 try {
-                    await db.collection(collections.USER).createIndex({ email: 1 }, { unique: true })
+                    await db.collection(collections.USER).createIndex({ email: 1 }, { unique: true });
                     res = await db.collection(collections.USER).insertOne({
                         _id: new ObjectId(_id),
-                        email: email,
-                        fName: fName,
-                        lName: lName,
-                        pass: pass
-                    })
+                        email,
+                        pass,
+                        fName,
+                        lName,
+                        companyType,
+                        personaType,
+                        address: {
+                            address1,
+                            address2,
+                            zipcode,
+                            state
+                        },
+                        phone
+                    });
                 } catch (err) {
                     if (err?.code === 11000) {
-                        reject({ status: 422 })
+                        reject({ status: 422 });
                     } else {
-                        reject(err)
+                        reject(err);
                     }
                 } finally {
                     if (res?.insertedId) {
-                        await db.collection(collections.TEMP).deleteOne({
-                            _id: new ObjectId(_id)
-                        }).catch((err) => {
-                            console.log(err)
-                        })
-
-                        resolve(res)
+                        await db.collection(collections.TEMP).deleteOne({ _id: new ObjectId(_id) }).catch(console.log);
+                        resolve(res);
                     } else {
-                        reject({ text: "Something Wrong" })
+                        reject({ text: "Something went wrong" });
                     }
                 }
             } else {
-                reject({ text: "Something Wrong" })
+                reject({ text: "Something went wrong" });
             }
-        })
+        });
     },
     login: ({ email, pass, manual }) => {
         return new Promise(async (resolve, reject) => {
