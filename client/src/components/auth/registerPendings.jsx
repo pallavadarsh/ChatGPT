@@ -97,8 +97,8 @@ const RegisterPendings = ({ _id }) => {
           <input className="register-field address-line1-input" type="text" placeholder="Address Line 1"
             value={formData.address1}
             onChange={(e) => setFormData({ ...formData, address1: e.target.value })} />
-          <input className="register-field address-line2-input" type="text" placeholder="Address Line 2"
-            value={formData.address2}
+          <input className="register-field address-line2-input" type="text" placeholder="Address Line 2 (Optional)"
+            value={formData.address2 || ""}
             onChange={(e) => setFormData({ ...formData, address2: e.target.value })} />
         </div>
 

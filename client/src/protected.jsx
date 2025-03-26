@@ -23,6 +23,7 @@ const ProtectedRoute = ({ offline, authed }) => {
         console.log(baseURL)
         res = await instance.get(`${baseURL}/api/user/checkLogged`);
         if (res?.data?.data) {
+          sessionStorage.setItem("username", res?.data?.data.fname + " " + res?.data?.data.lname);
           dispatch(insertUser(res?.data?.data));
         }
       } catch (err) {

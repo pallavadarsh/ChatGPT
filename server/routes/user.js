@@ -245,11 +245,11 @@ router.get('/login', CheckLogged, async (req, res) => {
                     _id: response._id,
                     email: response.email
                 }, process.env.JWT_PRIVATE_KEY, {
-                    expiresIn: '24h'
+                    expiresIn: '168h'
                 })
 
                 res.status(200)
-                    .cookie("userToken", token, { httpOnly: true, expires: new Date(Date.now() + 86400000) })
+                    .cookie("userToken", token, { httpOnly: true, expires: new Date(Date.now() + 604800000) })
                     .json({
                         status: 200,
                         message: 'Success',

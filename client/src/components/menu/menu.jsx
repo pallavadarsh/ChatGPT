@@ -124,16 +124,20 @@ const Menu = ({ changeColorMode }) => {
         settingRef={settingRef}
       />
 
+      
+        
       <header >
         <div className='start'>
           <button onClick={showMenuMd} ref={btnRef}><Bar /></button>
         </div>
+
 
         <div className='title'>
           {
             path.length > 6 ? history[0]?.prompt : 'New chat'
           }
         </div>
+
 
         <div className='end'>
           <button onClick={() => {
@@ -145,9 +149,13 @@ const Menu = ({ changeColorMode }) => {
           }}><Plus /></button>
         </div>
       </header>
-
+      
       <div className="menu" ref={menuRef}>
+      <div >
+             Hello {sessionStorage.getItem("username")}
+            </div>
         <div>
+            
           <button
             type='button'
             aria-label='new'
