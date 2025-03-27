@@ -149,11 +149,10 @@ const Menu = ({ changeColorMode }) => {
           }}><Plus /></button>
         </div>
       </header>
-      
+      <div className="user-name">
+    Hello, {sessionStorage.getItem("username") || "Guest"}
+</div>
       <div className="menu" ref={menuRef}>
-      <div >
-             Hello {sessionStorage.getItem("username")}
-            </div>
         <div>
             
           <button

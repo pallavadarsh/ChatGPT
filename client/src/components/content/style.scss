@@ -315,3 +315,22 @@
         }
     }
 }
+
+.user-name {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff; /* Light color for contrast */
+    padding: 12px 20px;
+    text-align: left;
+    background: linear-gradient(135deg, #2a2a2a, #1e1e1e); /* Subtle gradient */
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Optional: Adding an icon before the name */
+.user-name::before {
+    content: "👤"; /* You can replace this with an actual SVG or font-awesome icon */
+    font-size: 20px;
+}
